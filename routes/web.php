@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use App\Models\Post;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,27 +17,14 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-    $files = File::files(resource_path("posts/"));
-    $posts = collect($files)
-        ->map(fn($file) => YamlFrontMatter::parseFile($file))
-        ->map(fn($document) => new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->slug,
-                $document->body(),
-            ));
-
-    return view('posts', [
-        'posts' => $posts
-    ]);
+  return view('posts', [
+    'posts' => Post::all()
+  ]);
 });
 
 Route::get('/posts/{post}', function ($slug) {
-    $post = Post::find($slug);
-
-    return view('post', [
-        'post' => $post
-    ]);
+  return view('post', [
+    'post' => Post::find($slug)
+  ]);
 })->where('post', '[A-z_\-]+');
 
