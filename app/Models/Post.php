@@ -40,6 +40,7 @@ class Post
         $document->date,
         $document->slug,
         $document->body(),
-      ));
+      ))
+      ->sortByDesc('date');
   }
 }
